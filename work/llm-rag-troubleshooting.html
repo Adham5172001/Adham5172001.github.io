@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fault diagnosis that removes the site visit — Adham Aboulkheir</title>
+<meta name="description" content="A retrieval-augmented LLM grounded in BT Group's engineering documentation, built so every answer cites the manual it came from. 87.3% resolution accuracy.">
+<link rel="canonical" href="https://adhamaboulkheir.io/work/llm-rag-troubleshooting.html">
+<meta name="theme-color" content="#0a0a0b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fault diagnosis that removes the site visit">
+<meta property="og:description" content="Retrieval-augmented LLM for telecom fault diagnosis. 87.3% resolution accuracy, every answer grounded in a cited source.">
+<meta property="og:url" content="https://adhamaboulkheir.io/work/llm-rag-troubleshooting.html">
+<meta property="og:image" content="https://adhamaboulkheir.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="../index.html"><span class="dot"></span>adham aboulkheir</a>
+    <button class="burger" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="../index.html#work">Work</a></li>
+      <li><a href="../index.html#research">Research</a></li>
+      <li><a href="../index.html#experience">Experience</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+      <li><a class="nav-cta" href="../cv.html">CV</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="cs-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="../index.html">Home</a> <span>/</span> <a href="../index.html#work">Work</a> <span>/</span> <span>003</span></div>
+    <h1>Fault diagnosis that removes the site visit</h1>
+    <p class="cs-hero__lede">Every unnecessary engineer dispatch costs a day and a vehicle. A retrieval-augmented LLM, grounded strictly in BT's own engineering documentation, resolved the majority of issues without one — and cited its source every time.</p>
+    <div class="cs-hero__facts">
+      <span class="chip">BT Group</span>
+      <span class="chip">LangChain</span>
+      <span class="chip">FAISS</span>
+      <span class="chip">OpenAI</span>
+      <span class="chip">FastAPI</span>
+    </div>
+    <div class="cs-metrics">
+      <div><b>87.3%</b><span>Resolution accuracy</span></div>
+      <div><b>FAISS</b><span>Vector retrieval</span></div>
+      <div><b>LangChain</b><span>Orchestration</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap cs-body">
+  <article class="prose">
+
+    <h2 id="problem">The problem</h2>
+    <p>Telecom fault resolution runs on institutional knowledge that lives in two places: thousands of pages of engineering documentation, and the heads of engineers who have seen the fault before. Neither is queryable at three in the morning by someone who has not seen it before.</p>
+    <p>The default resolution path is therefore a site visit. A van, an engineer, a day — often to discover something a document already covered.</p>
+    <p>A general-purpose LLM is a tempting shortcut and a bad answer. It has no knowledge of BT's specific hardware, procedures or terminology, and its failure mode is the worst possible one for this domain: producing a confident, fluent, wrong instruction. In a context where the output dispatches physical resources or touches live infrastructure, a plausible hallucination is more expensive than no answer at all.</p>
+
+    <div class="callout">
+      <b>The requirement</b>
+      <p>Answers had to be grounded in the actual documentation and traceable back to it. An engineer must be able to check the model's work in one click — otherwise the system just moves the trust problem rather than solving it.</p>
+    </div>
+
+    <h2 id="approach">Approach</h2>
+    <p>The system is <strong>retrieval-augmented generation</strong>, built so that retrieval carries the knowledge and the LLM only carries the language.</p>
+
+    <h3>1. Document ingestion and chunking</h3>
+    <p>Engineering documentation is parsed and split into chunks sized to preserve procedural coherence. This is the least glamorous part of the build and the one that most determines quality — a chunk boundary through the middle of a numbered procedure produces retrievals that are technically relevant and practically useless.</p>
+
+    <h3>2. Vector index</h3>
+    <p><strong>FAISS</strong> over embedded chunks, tuned for recall over precision at the retrieval stage. It is cheaper to hand the model one irrelevant chunk than to omit the relevant one; the generation step can ignore noise, but it cannot recover information that was never retrieved.</p>
+
+    <h3>3. Grounded generation</h3>
+    <p>Retrieved context is composed into a prompt that constrains the model to answer <em>from the supplied context only</em>, and to say so explicitly when the context is insufficient. "I don't have documentation covering this" is a correct and valuable output. It routes the case to a human instead of to a wrong answer.</p>
+
+    <h3>4. Citation</h3>
+    <p>Every answer returns the source chunks it drew on. This is what makes the output auditable, and it is what made engineers willing to use it.</p>
+
+    <figure class="figure figure--svg">
+      <svg viewBox="0 0 1012 352" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t62340"><title id="t62340">Retrieval-augmented generation architecture</title><desc>An engineer query is embedded and matched against a FAISS index built from chunked engineering documentation; retrieved context is assembled into a constrained prompt so the model answers only from supplied sources, returning a cited answer or an explicit abstention.</desc><g transform="translate(16,16)"><text x="0" y="20" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="9.5" letter-spacing="1.6" fill="#6e6e6b">RETRIEVAL-AUGMENTED DIAGNOSIS</text><rect x="0" y="58" width="160" height="80" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="80.0" y="92.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">Engineer query</text><text x="80.0" y="111.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">natural language</text><rect x="196" y="58" width="160" height="80" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="276.0" y="92.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">Embedding</text><text x="276.0" y="111.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">vector encode</text><rect x="392" y="58" width="160" height="80" rx="9" fill="rgba(204,242,77,.07)" stroke="#ccf24d" stroke-width="1"/><text x="472.0" y="92.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#ccf24d">FAISS retrieval</text><text x="472.0" y="111.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">tuned for recall</text><rect x="588" y="58" width="160" height="80" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="668.0" y="92.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">Context assembly</text><text x="668.0" y="111.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">top-k chunks</text><rect x="784" y="58" width="196" height="80" rx="9" fill="rgba(204,242,77,.07)" stroke="#ccf24d" stroke-width="1"/><text x="882.0" y="92.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#ccf24d">Grounded generation</text><text x="882.0" y="111.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">context-only prompt</text><line x1="160" y1="98.0" x2="189" y2="98.0" stroke="#6e6e6b" stroke-width="1.2"/><path d="M189 94.0 L196 98.0 L189 102.0" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><line x1="356" y1="98.0" x2="385" y2="98.0" stroke="#6e6e6b" stroke-width="1.2"/><path d="M385 94.0 L392 98.0 L385 102.0" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><line x1="552" y1="98.0" x2="581" y2="98.0" stroke="#6e6e6b" stroke-width="1.2"/><path d="M581 94.0 L588 98.0 L581 102.0" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><line x1="748" y1="98.0" x2="777" y2="98.0" stroke="#6e6e6b" stroke-width="1.2"/><path d="M777 94.0 L784 98.0 L777 102.0" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><rect x="392" y="208" width="160" height="74" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="472.0" y="239.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">Chunked docs</text><text x="472.0" y="258.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">procedure-preserving</text><line x1="472" y1="208" x2="472" y2="145" stroke="#6e6e6b" stroke-width="1.2"/><path d="M468 145 L472 138 L476 145" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><rect x="784" y="208" width="196" height="74" rx="9" fill="rgba(204,242,77,.07)" stroke="#ccf24d" stroke-width="1"/><text x="882.0" y="239.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#ccf24d">Cited answer</text><text x="882.0" y="258.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">or explicit abstention</text><line x1="882" y1="138" x2="882" y2="201" stroke="#ccf24d" stroke-width="1.2"/><path d="M878 201 L882 208 L886 201" fill="none" stroke="#ccf24d" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><text x="0" y="260" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">Retrieval carries the knowledge.</text><text x="0" y="278" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">The model only carries the language.</text></g></svg>
+      <figcaption>Fig. 1 — Retrieval-augmented diagnosis flow.</figcaption>
+    </figure>
+
+    <h2 id="results">Results</h2>
+    <p>The system reached <strong>87.3% resolution accuracy</strong> on evaluated fault cases — issues resolved correctly from documentation without escalation to a site visit. Every answer shipped with its sources attached.</p>
+    <p>A companion <a href="https://github.com/Adham5172001/generative-ai-llm-pipeline" target="_blank" rel="noopener">GenAI pipeline project</a> formalised the evaluation side of this work: hybrid TF-IDF retrieval, chain-of-thought prompting, faithfulness scoring and BLEU/ROUGE benchmarking, reducing hallucination rate by 78% against an ungrounded baseline. That figure belongs to the companion project, not to this system.</p>
+
+    <div class="tbl-scroll">
+      <table class="tbl">
+        <thead><tr><th>Component</th><th>Choice</th></tr></thead>
+        <tbody>
+          <tr><td>Orchestration</td><td>LangChain</td></tr>
+          <tr><td>Vector store</td><td>FAISS</td></tr>
+          <tr><td>Generation</td><td>OpenAI models</td></tr>
+          <tr><td>Serving</td><td>FastAPI</td></tr>
+          <tr><td>Resolution accuracy</td><td>87.3%</td></tr>
+          <tr><td>Grounding policy</td><td>Context-only, explicit abstention</td></tr>
+        </tbody>
+      </table>
+    </div>
+    
+
+    <h2 id="learned">What the project taught me</h2>
+    <ul>
+      <li><strong>Retrieval quality dominates model quality.</strong> Time spent on chunking and index tuning returned more than time spent on prompt engineering or model selection.</li>
+      <li><strong>Abstention is a feature.</strong> A system that reliably says "not covered" is more useful than one with a higher raw answer rate and an unknown error rate.</li>
+      <li><strong>Citations are the adoption mechanism.</strong> Engineers did not need the model to be right every time. They needed to be able to check it in seconds.</li>
+      <li><strong>Evaluate faithfulness, not fluency.</strong> BLEU and ROUGE describe surface similarity. Faithfulness scoring against retrieved context is what actually tracks whether the answer is grounded.</li>
+    </ul>
+
+    <p style="margin-top:36px">
+      <a class="btn" href="https://github.com/Adham5172001/llm-rag-troubleshooting" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"/></svg>
+        View the repository
+      </a>
+    </p>
+
+  </article>
+
+  <nav class="cs-toc" aria-label="On this page">
+    <b>On this page</b>
+    <a href="#problem">The problem</a>
+    <a href="#approach">Approach</a>
+    <a href="#results">Results</a>
+    <a href="#learned">What it taught me</a>
+  </nav>
+</div>
+
+<nav class="nextprev">
+  <a href="synthetic-data-generation.html"><small>Previous</small><strong>50 photos → 350,000 images</strong></a>
+  <a href="ai-telemetry-motorsport.html"><small>Next case study</small><strong>Race-day telemetry</strong></a>
+</nav>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <span>© <span data-year>2026</span> Adham Aboulkheir · Colchester, UK</span>
+    <nav>
+      <a href="../index.html#work">Work</a>
+      <a href="../cv.html">CV</a>
+      <a href="https://github.com/Adham5172001" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/adhamaboulkheir" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

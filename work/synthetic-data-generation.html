@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>50 photographs into 350,000 training images — Adham Aboulkheir</title>
+<meta name="description" content="A DCGAN + Beta-VAE + Stable Diffusion pipeline that manufactured the telecom fault dataset BT Group did not have, improving YOLOv8 mAP by 9.6 percentage points.">
+<link rel="canonical" href="https://adhamaboulkheir.io/work/synthetic-data-generation.html">
+<meta name="theme-color" content="#0a0a0b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="50 photographs into 350,000 training images">
+<meta property="og:description" content="Generative pipeline that manufactured the dataset BT Group did not have. +9.6 pp mAP.">
+<meta property="og:url" content="https://adhamaboulkheir.io/work/synthetic-data-generation.html">
+<meta property="og:image" content="https://adhamaboulkheir.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="../index.html"><span class="dot"></span>adham aboulkheir</a>
+    <button class="burger" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="../index.html#work">Work</a></li>
+      <li><a href="../index.html#research">Research</a></li>
+      <li><a href="../index.html#experience">Experience</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+      <li><a class="nav-cta" href="../cv.html">CV</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="cs-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="../index.html">Home</a> <span>/</span> <a href="../index.html#work">Work</a> <span>/</span> <span>002</span></div>
+    <h1>50 photographs into 350,000 training images</h1>
+    <p class="cs-hero__lede">BT Group needed to detect faults in telecom equipment from imagery. The blocker was not the model — it was that only fifty labelled photographs existed. So I generated the rest.</p>
+    <div class="cs-hero__facts">
+      <span class="chip">BT Group</span>
+      <span class="chip">PyTorch</span>
+      <span class="chip">DCGAN</span>
+      <span class="chip">Beta-VAE</span>
+      <span class="chip">Stable Diffusion</span>
+    </div>
+    <div class="cs-metrics">
+      <div><b>+9.6 pp</b><span>mAP@0.5 improvement</span></div>
+      <div><b>350K+</b><span>Synthetic images</span></div>
+      <div><b>50</b><span>Real source images</span></div>
+      <div><b>10</b><span>Fault classes</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap cs-body">
+  <article class="prose">
+
+    <h2 id="problem">The problem</h2>
+    <p>Detecting equipment faults from photographs is, on paper, a solved computer vision task. In practice it is a data problem wearing a modelling costume.</p>
+    <p>Faults are rare by definition. Nobody photographs working equipment, and when something does fail, the priority is fixing it rather than documenting it from twelve angles under varied lighting. The available corpus was <strong>fifty real images</strong> spanning ten fault classes — roughly five examples per class.</p>
+    <p>No amount of architecture selection rescues five examples per class. Conventional augmentation — flips, crops, colour jitter — multiplies the count but not the information: the model still only ever sees fifty distinct objects.</p>
+
+    <div class="callout">
+      <b>The bet</b>
+      <p>If generative models could produce imagery that varied in ways real photographs vary — angle, lighting, occlusion, background clutter — the detector would learn the fault, not the fifty photographs.</p>
+    </div>
+
+    <h2 id="approach">Approach</h2>
+    <p>Rather than committing to one generator, I built three and evaluated them against each other on the only criterion that mattered: <strong>downstream detection performance</strong>.</p>
+
+    <h3>DCGAN</h3>
+    <p>Fast to train and effective at reproducing texture and surface detail — corrosion, cabling, connector wear. Prone to mode collapse on a dataset this small, which constrained how far it could be pushed.</p>
+
+    <h3>Beta-VAE</h3>
+    <p>The β term trades reconstruction sharpness for a more disentangled latent space. Blurrier outputs than the GAN, but the latent structure allowed controlled interpolation between fault states — useful for generating the ambiguous middle cases a detector otherwise never sees.</p>
+
+    <h3>Stable Diffusion</h3>
+    <p>The strongest contributor. Diffusion generated genuinely novel compositions — the same fault in different physical contexts — rather than recombining fragments of the training set. A parallel <a href="https://github.com/Adham5172001/stable-diffusion-augmentation" target="_blank" rel="noopener">ControlNet-guided variant</a> constrained generation to preserve the structural layout of the equipment while varying everything else.</p>
+
+    <figure class="figure figure--svg">
+      <svg viewBox="0 0 1012 432" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t18701"><title id="t18701">Synthetic data generation pipeline</title><desc>Fifty real telecom images feed three generative models — DCGAN, Beta-VAE and Stable Diffusion — producing over 350,000 synthetic images, evaluated both on FID and Inception Score and on downstream YOLOv8 detection performance.</desc><g transform="translate(16,16)"><text x="0" y="20" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="9.5" letter-spacing="1.6" fill="#6e6e6b">GENERATIVE AUGMENTATION PIPELINE</text><rect x="0" y="52" width="168" height="78" rx="9" fill="rgba(204,242,77,.07)" stroke="#ccf24d" stroke-width="1"/><text x="84.0" y="85.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#ccf24d">50 real images</text><text x="84.0" y="104.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">10 fault classes</text><rect x="268" y="46" width="190" height="62" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="363.0" y="71.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">DCGAN</text><text x="363.0" y="90.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">texture, surface detail</text><path d="M168 91 C 215 91, 225 77.0, 261 77.0" fill="none" stroke="#6e6e6b" stroke-width="1.2"/><path d="M261 73.0 L268 77.0 L261 81.0" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><rect x="268" y="128" width="190" height="62" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="363.0" y="153.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">Beta-VAE</text><text x="363.0" y="172.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">disentangled latent</text><path d="M168 91 C 215 91, 225 159.0, 261 159.0" fill="none" stroke="#6e6e6b" stroke-width="1.2"/><path d="M261 155.0 L268 159.0 L261 163.0" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><rect x="268" y="210" width="190" height="62" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="363.0" y="235.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">Stable Diffusion</text><text x="363.0" y="254.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">novel compositions</text><path d="M168 91 C 215 91, 225 241.0, 261 241.0" fill="none" stroke="#6e6e6b" stroke-width="1.2"/><path d="M261 237.0 L268 241.0 L261 245.0" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><rect x="488" y="46" width="172" height="226" rx="9" fill="rgba(204,242,77,.07)" stroke="#ccf24d" stroke-width="1"/><text x="574.0" y="145.5" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#ccf24d">350,000+ synthetic</text><text x="574.0" y="160.5" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#ccf24d">images</text><text x="574.0" y="179.5" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">mixed at a tuned ratio</text><line x1="458" y1="77.0" x2="481" y2="77.0" stroke="#6e6e6b" stroke-width="1.2"/><path d="M481 73.0 L488 77.0 L481 81.0" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><line x1="458" y1="159.0" x2="481" y2="159.0" stroke="#6e6e6b" stroke-width="1.2"/><path d="M481 155.0 L488 159.0 L481 163.0" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><line x1="458" y1="241.0" x2="481" y2="241.0" stroke="#6e6e6b" stroke-width="1.2"/><path d="M481 237.0 L488 241.0 L481 245.0" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><rect x="690" y="46" width="168" height="74" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="774.0" y="77.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">FID / Inception</text><text x="774.0" y="96.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">generation quality</text><rect x="690" y="146" width="168" height="74" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="774.0" y="177.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">Downstream mAP</text><text x="774.0" y="196.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">ablation — decisive</text><line x1="660" y1="83" x2="683" y2="83" stroke="#6e6e6b" stroke-width="1.2"/><path d="M683 79 L690 83 L683 87" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><line x1="660" y1="183" x2="683" y2="183" stroke="#6e6e6b" stroke-width="1.2"/><path d="M683 179 L690 183 L683 187" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><rect x="690" y="246" width="168" height="74" rx="9" fill="rgba(204,242,77,.07)" stroke="#ccf24d" stroke-width="1"/><text x="774.0" y="277.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#ccf24d">YOLOv8 detector</text><text x="774.0" y="296.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">mAP@0.5 → 0.943</text><line x1="774" y1="220" x2="774" y2="239" stroke="#6e6e6b" stroke-width="1.2"/><path d="M770 239 L774 246 L778 239" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><text x="0" y="352" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">Quality metrics are a sanity check. The ablation against real detection performance is what decided the mix.</text></g></svg>
+      <figcaption>Fig. 1 — Generative augmentation pipeline and its two evaluation paths.</figcaption>
+    </figure>
+
+    <h2 id="evaluation">Evaluating generated data honestly</h2>
+    <p>The trap in synthetic data work is optimising for images that look convincing to a human. Convincing is not the same as useful, and a generator can score well on perceptual metrics while producing data the detector learns nothing from.</p>
+    <p>So I measured both:</p>
+    <ul>
+      <li><strong>FID and Inception Score</strong> — distributional similarity to the real data, as a sanity check on generation quality.</li>
+      <li><strong>Downstream mAP ablation</strong> — the decisive test. Train the same YOLOv8 configuration on different mixes of real and synthetic data, and compare detection performance. Only this answers whether the synthetic data carries information.</li>
+    </ul>
+    <p>The ablation is what turned the pipeline from a plausible idea into a defensible one. It also determined the final real-to-synthetic ratio, which is not something intuition gets right.</p>
+
+    <div class="figure">
+      <div class="figure__ph">Figure 2 — ablation study<br>mAP@0.5 vs. synthetic-to-real ratio across generator configurations</div>
+      <figcaption>Fig. 2 — Downstream mAP ablation across data mixes.</figcaption>
+    </div>
+
+    <h2 id="results">Results</h2>
+    <p>The final pipeline expanded fifty real images into over <strong>350,000 synthetic training images</strong> and lifted YOLOv8 detection by <strong>9.6 percentage points of mAP@0.5</strong>, reaching <strong>0.943</strong> across ten fault classes. The ControlNet-guided augmentation variant contributed a further <strong>+7.6% mAP</strong> over conventional augmentation in its own evaluation.</p>
+
+    <div class="tbl-scroll">
+      <table class="tbl">
+        <thead><tr><th>Metric</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>Real source images</td><td>50</td></tr>
+          <tr><td>Synthetic images generated</td><td>350,000+</td></tr>
+          <tr><td>mAP@0.5 improvement</td><td>+9.6 percentage points</td></tr>
+          <tr><td>Final mAP@0.5</td><td>0.943</td></tr>
+          <tr><td>Fault classes</td><td>10</td></tr>
+          <tr><td>Generation quality metrics</td><td>FID, Inception Score</td></tr>
+          <tr><td>Deployment</td><td>ONNX export, FastAPI, Docker</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="learned">What I would carry forward</h2>
+    <ul>
+      <li><strong>Generator choice is empirical, not theoretical.</strong> The literature ranking of these three architectures did not predict their ranking on this task at this data scale.</li>
+      <li><strong>Perceptual metrics are a sanity check, not an objective.</strong> Everything that mattered showed up in the downstream ablation.</li>
+      <li><strong>The mix ratio is a hyperparameter.</strong> More synthetic data is not monotonically better; past a point the detector starts learning the generator's artefacts.</li>
+      <li><strong>Bulk generation needs to be reproducible.</strong> Scripting it — seeds, prompts, configurations under version control — is the difference between a result and an experiment.</li>
+    </ul>
+
+    <p style="margin-top:36px">
+      <a class="btn" href="https://github.com/Adham5172001/synthetic-data-generation" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"/></svg>
+        View the repository
+      </a>
+    </p>
+
+  </article>
+
+  <nav class="cs-toc" aria-label="On this page">
+    <b>On this page</b>
+    <a href="#problem">The problem</a>
+    <a href="#approach">Approach</a>
+    <a href="#evaluation">Evaluating honestly</a>
+    <a href="#results">Results</a>
+    <a href="#learned">What I'd carry forward</a>
+  </nav>
+</div>
+
+<nav class="nextprev">
+  <a href="mea-spike-detection.html"><small>Previous</small><strong>Interpretable spike detection</strong></a>
+  <a href="llm-rag-troubleshooting.html"><small>Next case study</small><strong>Removing the site visit</strong></a>
+</nav>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <span>© <span data-year>2026</span> Adham Aboulkheir · Colchester, UK</span>
+    <nav>
+      <a href="../index.html#work">Work</a>
+      <a href="../cv.html">CV</a>
+      <a href="https://github.com/Adham5172001" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/adhamaboulkheir" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

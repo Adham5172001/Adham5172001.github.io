@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An explainability framework for wet neural networks — Adham Aboulkheir</title>
+<meta name="description" content="Electrode importance, fuzzy rule extraction, counterfactual explanations, spatial autocorrelation and hub detection — an XAI toolkit for living neural biocomputers.">
+<link rel="canonical" href="https://adhamaboulkheir.io/work/biocomputer-explainability.html">
+<meta name="theme-color" content="#0a0a0b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="An explainability framework for wet neural networks">
+<meta property="og:description" content="Five complementary XAI methods for interrogating living neural biocomputers.">
+<meta property="og:url" content="https://adhamaboulkheir.io/work/biocomputer-explainability.html">
+<meta property="og:image" content="https://adhamaboulkheir.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="../index.html"><span class="dot"></span>adham aboulkheir</a>
+    <button class="burger" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="../index.html#work">Work</a></li>
+      <li><a href="../index.html#research">Research</a></li>
+      <li><a href="../index.html#experience">Experience</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+      <li><a class="nav-cta" href="../cv.html">CV</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="cs-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="../index.html">Home</a> <span>/</span> <a href="../index.html#work">Work</a> <span>/</span> <span>005</span></div>
+    <h1>An explainability framework for wet neural networks</h1>
+    <p class="cs-hero__lede">Detecting spikes tells you <em>that</em> a biocomputer is active. It does not tell you which parts of the culture are doing the work, whether activity is spatially organised, or what would have to change for the system to behave differently. This framework asks those questions.</p>
+    <div class="cs-hero__facts">
+      <span class="chip">PhD research</span>
+      <span class="chip">Python</span>
+      <span class="chip">SHAP</span>
+      <span class="chip">NetworkX</span>
+      <span class="chip">ANNIGMA</span>
+      <span class="chip">Moran's I</span>
+    </div>
+    <div class="cs-metrics">
+      <div><b>5</b><span>Complementary methods</span></div>
+      <div><b>2</b><span>Importance measures</span></div>
+      <div><b>Spatial</b><span>+ topological analysis</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap cs-body">
+  <article class="prose">
+
+    <h2 id="problem">The problem</h2>
+    <p>A Multi-Electrode Array holds a living culture whose behaviour is the object of study. Unlike an artificial network, you cannot read out its weights — the parameters are chemistry and morphology, not numbers in a file.</p>
+    <p>What you can observe is activity at each electrode, and what you can build on top of that is a model that predicts something about the culture. The explainability question is then: <strong>can the model be interrogated in ways that produce claims about the biology</strong>, not just about the model?</p>
+    <p>A single method will not do this. Electrode importance tells you <em>where</em>, rule extraction tells you <em>under what conditions</em>, counterfactuals tell you <em>what would have to change</em>, and spatial statistics tell you whether any of it is organised or coincidental. The framework exists because those are four different questions.</p>
+
+    <h2 id="methods">The five methods</h2>
+
+    <h3>1. Electrode importance — ANNIGMA</h3>
+    <p>Ranks electrodes by the gain they contribute through a trained network's weights. Cheap to compute and stable, which makes it a good first pass over a 60-electrode array.</p>
+
+    <h3>2. Electrode importance — permutation</h3>
+    <p>Measures the performance drop when an electrode's signal is shuffled. Model-agnostic and grounded in the actual predictive contribution rather than the architecture. Running both matters: <strong>where the two rankings disagree is where something interesting is happening</strong> — typically correlated electrodes whose importance one method attributes and the other distributes.</p>
+
+    <h3>3. Fuzzy rule extraction</h3>
+    <p>Extracts human-readable IF-THEN rules describing the conditions under which the model predicts activity. This is the direct link to the <a href="mea-spike-detection.html">spike detection work</a>, where the rule base <em>is</em> the classifier rather than a summary of one.</p>
+
+    <h3>4. Counterfactual explanations</h3>
+    <p>Answers the question an importance score cannot: what minimal change to the input would flip the prediction? For a biocomputer this is the closest available analogue to an intervention — a hypothesis about which activity pattern is doing the causal work, stated precisely enough to be tested.</p>
+
+    <h3>5. Spatial autocorrelation and hub detection</h3>
+    <p><strong>Moran's I</strong> quantifies whether activity is spatially clustered across the electrode grid or effectively random. Combined with <strong>NetworkX</strong>-based functional connectivity analysis, it identifies <em>hub electrodes</em> — sites that are disproportionately connected within the culture's functional network.</p>
+    <p>This is where the framework stops describing a model and starts describing biology. A hub electrode is a claim about the culture's organisation, and it is falsifiable.</p>
+
+    <figure class="figure figure--svg">
+      <svg viewBox="0 0 1012 362" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t97193"><title id="t97193">Explainability method triangulation</title><desc>Five explainability methods each answer a different question about a living neural biocomputer; agreement across methods is treated as evidence, whereas a signal from a single method is treated only as a lead.</desc><g transform="translate(16,16)"><text x="0" y="20" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="9.5" letter-spacing="1.6" fill="#6e6e6b">FIVE METHODS, FOUR QUESTIONS</text><text x="89.0" y="74" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="9.5" letter-spacing="1.4" fill="#ccf24d">WHERE</text><rect x="0" y="92" width="178" height="96" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="89.0" y="134.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">ANNIGMA</text><text x="89.0" y="153.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">which electrodes carry gain</text><line x1="89.0" y1="188" x2="89.0" y2="242" stroke="#6e6e6b" stroke-width="1" stroke-dasharray="3 4"/><text x="289.0" y="74" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="9.5" letter-spacing="1.4" fill="#ccf24d">WHERE</text><rect x="200" y="92" width="178" height="96" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="289.0" y="127.5" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">Permutation</text><text x="289.0" y="146.5" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">which electrodes the model</text><text x="289.0" y="159.5" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">needs</text><line x1="289.0" y1="188" x2="289.0" y2="242" stroke="#6e6e6b" stroke-width="1" stroke-dasharray="3 4"/><text x="489.0" y="74" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="9.5" letter-spacing="1.4" fill="#ccf24d">WHEN</text><rect x="400" y="92" width="178" height="96" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="489.0" y="134.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">Fuzzy rules</text><text x="489.0" y="153.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">under what conditions</text><line x1="489.0" y1="188" x2="489.0" y2="242" stroke="#6e6e6b" stroke-width="1" stroke-dasharray="3 4"/><text x="689.0" y="74" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="9.5" letter-spacing="1.4" fill="#ccf24d">WHAT IF</text><rect x="600" y="92" width="178" height="96" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="689.0" y="134.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">Counterfactuals</text><text x="689.0" y="153.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">what would have to change</text><line x1="689.0" y1="188" x2="689.0" y2="242" stroke="#6e6e6b" stroke-width="1" stroke-dasharray="3 4"/><text x="889.0" y="74" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="9.5" letter-spacing="1.4" fill="#ccf24d">HOW</text><rect x="800" y="92" width="178" height="96" rx="9" fill="#17171a" stroke="rgba(255,255,255,.12)" stroke-width="1"/><text x="889.0" y="134.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#e9e9e6">Moran's I + hubs</text><text x="889.0" y="153.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">how activity is organised</text><line x1="889.0" y1="188" x2="889.0" y2="242" stroke="#6e6e6b" stroke-width="1" stroke-dasharray="3 4"/><line x1="89" y1="242" x2="891" y2="242" stroke="#6e6e6b" stroke-width="1" stroke-dasharray="3 4"/><line x1="490.0" y1="242" x2="490.0" y2="255" stroke="#6e6e6b" stroke-width="1.2"/><path d="M486.0 255 L490.0 262 L494.0 255" fill="none" stroke="#6e6e6b" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><rect x="290.0" y="262" width="400" height="56" rx="9" fill="rgba(204,242,77,.07)" stroke="#ccf24d" stroke-width="1"/><text x="490.0" y="284.0" text-anchor="middle" font-family="Inter,-apple-system,sans-serif" font-size="12.5" font-weight="600" fill="#ccf24d">Convergent finding = evidence about the biology</text><text x="490.0" y="303.0" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="10" fill="#6e6e6b">single-method signal = a lead, not a result</text></g></svg>
+      <figcaption>Fig. 1 — How the five methods divide the explanatory question, and what agreement between them means.</figcaption>
+    </figure>
+
+    <div class="figure">
+      <div class="figure__ph">Figure 2 — functional connectivity graph<br>hub electrodes highlighted, Moran's I annotated</div>
+      <figcaption>Fig. 2 — Functional network topology and hub detection.</figcaption>
+    </div>
+
+    <h2 id="why">Why combine them</h2>
+    <p>Each method has a characteristic blind spot, and the blind spots do not overlap.</p>
+    <div class="tbl-scroll">
+      <table class="tbl">
+        <thead><tr><th>Method</th><th>Answers</th><th>Blind to</th></tr></thead>
+        <tbody>
+          <tr><td>ANNIGMA</td><td>Which electrodes carry gain</td><td>Correlated-feature redundancy</td></tr>
+          <tr><td>Permutation</td><td>Which electrodes the model needs</td><td>Interaction effects</td></tr>
+          <tr><td>Fuzzy rules</td><td>Under what conditions</td><td>Continuous magnitude</td></tr>
+          <tr><td>Counterfactuals</td><td>What would have to change</td><td>Global structure</td></tr>
+          <tr><td>Moran's I / hubs</td><td>How activity is organised</td><td>Predictive relevance</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Read together they triangulate. An electrode that ranks highly on both importance measures, appears in high-weight rules, and sits at a network hub is a genuine finding. One that ranks highly on a single measure is a lead.</p>
+
+    <h2 id="related">Related work</h2>
+    <ul>
+      <li><a href="mea-spike-detection.html">Interpretable spike detection</a> — the classifier this framework interrogates, published at WCCI FUZZ-IEEE 2026.</li>
+      <li><a href="https://github.com/Adham5172001/neural-biocomputer-analysis" target="_blank" rel="noopener">Neural Biocomputer Analysis Toolkit</a> — the signal-processing layer beneath it: bandpass filtering, burst detection, connectivity matrices and raster plots.</li>
+      <li><a href="https://github.com/Adham5172001/interval-type2-fuzzy-classifier" target="_blank" rel="noopener">Interval Type-2 Fuzzy Classifier</a> — modelling second-order uncertainty for biological variability.</li>
+    </ul>
+
+    <p style="margin-top:36px">
+      <a class="btn" href="https://github.com/Adham5172001/biocomputer-explainability" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"/></svg>
+        View the repository
+      </a>
+    </p>
+
+  </article>
+
+  <nav class="cs-toc" aria-label="On this page">
+    <b>On this page</b>
+    <a href="#problem">The problem</a>
+    <a href="#methods">The five methods</a>
+    <a href="#why">Why combine them</a>
+    <a href="#related">Related work</a>
+  </nav>
+</div>
+
+<nav class="nextprev">
+  <a href="ai-telemetry-motorsport.html"><small>Previous</small><strong>Race-day telemetry</strong></a>
+  <a href="../index.html#work"><small>Back to</small><strong>All work</strong></a>
+</nav>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <span>© <span data-year>2026</span> Adham Aboulkheir · Colchester, UK</span>
+    <nav>
+      <a href="../index.html#work">Work</a>
+      <a href="../cv.html">CV</a>
+      <a href="https://github.com/Adham5172001" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/adhamaboulkheir" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

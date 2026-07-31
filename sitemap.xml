@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://adhamaboulkheir.io/</loc><priority>1.0</priority></url>
+  <url><loc>https://adhamaboulkheir.io/cv.html</loc><priority>0.8</priority></url>
+  <url><loc>https://adhamaboulkheir.io/work/mea-spike-detection.html</loc><priority>0.9</priority></url>
+  <url><loc>https://adhamaboulkheir.io/work/synthetic-data-generation.html</loc><priority>0.9</priority></url>
+  <url><loc>https://adhamaboulkheir.io/work/llm-rag-troubleshooting.html</loc><priority>0.9</priority></url>
+  <url><loc>https://adhamaboulkheir.io/work/ai-telemetry-motorsport.html</loc><priority>0.9</priority></url>
+  <url><loc>https://adhamaboulkheir.io/work/biocomputer-explainability.html</loc><priority>0.9</priority></url>
+</urlset>

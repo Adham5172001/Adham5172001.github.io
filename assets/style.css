@@ -441,3 +441,8 @@ ul,ol{margin:0;padding:0}
   .wrap{padding:0;max-width:none}
   @page{margin:14mm}
 }
+
+
+/* Figures still awaiting real data are hidden rather than shown as empty boxes.
+   Delete this rule once the plots are dropped in. */
+.figure:has(.figure__ph){display:none}

@@ -33,7 +33,7 @@
       <li><a href="index.html#research">Research</a></li>
       <li><a href="index.html#experience">Experience</a></li>
       <li><a href="index.html#contact">Contact</a></li>
-      <li><a class="nav-cta" href="#" id="printcv">Download PDF</a></li>
+      <li><a class="nav-cta" href="Adham_Aboulkheir_CV.pdf" download>Download PDF</a></li>
     </ul>
   </div>
 </header>
@@ -58,7 +58,7 @@
   <section class="cv__grid">
     <h2>Profile</h2>
     <div>
-      <p style="color:var(--ink-2);font-size:15.2px">PhD researcher in artificial intelligence at the University of Essex, working on explainable fuzzy classifiers for living neural biocomputers. Three years of industry experience delivering production machine learning at BT Group and Saudi Motorsport, spanning generative models, retrieval-augmented LLM systems, computer vision and real-time streaming inference. Published at IEEE WCCI FUZZ-IEEE 2026. Particular interest in problems where a model's decision has to be defensible, not merely accurate.</p>
+      <p style="color:var(--ink-2);font-size:15.2px">PhD researcher in artificial intelligence at the University of Essex, working on explainable fuzzy classifiers for living neural biocomputers, alongside an AI Engineer post on the UK Data Service's QUADRA-AI project and teaching support across two postgraduate modules. Three years of prior industry experience delivering production machine learning at BT Group and Saudi Motorsport, spanning generative models, retrieval-augmented LLM systems, computer vision and real-time streaming inference. Published at IEEE WCCI FUZZ-IEEE 2026. Particular interest in problems where a model's decision has to be defensible, not merely accurate.</p>
     </div>
   </section>
 
@@ -106,7 +106,25 @@
     <h2>Experience</h2>
     <div>
       <div class="cv__entry">
-        <div class="top"><h3>AI Product &amp; Backend Delivery Engineer</h3><span class="when">Jun 2025 — Present</span></div>
+        <div class="top"><h3>AI Engineer — Disclosure Protection, Anonymisation &amp; Transcription</h3><span class="when">Oct 2026 — Present</span></div>
+        <div class="org">QUADRA-AI · UK Data Archive / UK Data Service, University of Essex</div>
+        <ul>
+          <li>Applying AI to automated disclosure protection, anonymisation and transcription across the UK Data Service's research data holdings</li>
+          <li>The UK Data Service holds the UK's largest collection of social, economic and population research data</li>
+        </ul>
+      </div>
+
+      <div class="cv__entry">
+        <div class="top"><h3>Graduate Laboratory Assistant</h3><span class="when">Oct 2026 — Present</span></div>
+        <div class="org">University of Essex, School of Computer Science and Electronic Engineering</div>
+        <ul>
+          <li>Teaching support across two postgraduate modules, CE801 and CE889</li>
+          <li>Lab demonstrating, student support and assessment</li>
+        </ul>
+      </div>
+
+      <div class="cv__entry">
+        <div class="top"><h3>AI Product &amp; Backend Delivery Engineer</h3><span class="when">Jun 2025 — Oct 2026</span></div>
         <div class="org">ThresholdXpert AI Coach</div>
         <ul>
           <li>Designed and built the athlete performance analysis backend, moving the product from prototype to a stakeholder-ready Phase 3 release</li>
@@ -157,14 +175,14 @@
         <ul><li>LoRA/QLoRA fine-tuning for Mistral-7B, hybrid TF-IDF RAG, chain-of-thought prompting, faithfulness scoring and BLEU/ROUGE benchmarking — 78% reduction in hallucination against an ungrounded baseline</li></ul>
       </div>
       <div class="cv__entry">
-        <div class="top"><h3>Predictive Maintenance Pipeline</h3><span class="when">2024</span></div>
-        <div class="org">Open source</div>
-        <ul><li>Rolling feature engineering with an XGBoost failure predictor at AUC-ROC 0.97 and 48–72 hour lead time, MLflow-ready</li></ul>
-      </div>
-      <div class="cv__entry">
         <div class="top"><h3>Interval Type-2 Fuzzy Classifier</h3><span class="when">2025</span></div>
         <div class="org">PhD research</div>
         <ul><li>IT2 fuzzy classification with GA-optimised interval-valued rule weights for modelling second-order uncertainty</li></ul>
+      </div>
+      <div class="cv__entry">
+        <div class="top"><h3>Predictive Maintenance Pipeline</h3><span class="when">2024</span></div>
+        <div class="org">Open source</div>
+        <ul><li>Rolling feature engineering with an XGBoost failure predictor at AUC-ROC 0.97 and 48–72 hour lead time, MLflow-ready</li></ul>
       </div>
       <p style="margin-top:18px;color:var(--ink-3);font-size:13.5px">Full index of 21 public repositories at <a href="https://github.com/Adham5172001" style="color:var(--acid)">github.com/Adham5172001</a></p>
     </div>
@@ -193,11 +211,11 @@
   </section>
 
   <p class="no-print" style="margin-top:44px">
-    <a class="btn btn--fill" href="#" id="printcv2">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
-      Download as PDF
+    <a class="btn btn--fill" href="Adham_Aboulkheir_CV.pdf" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+      Download CV (PDF)
     </a>
-    <span class="mono" style="display:block;margin-top:14px;font-size:12px;color:var(--ink-3)">Opens your browser's print dialog — choose “Save as PDF”. The print stylesheet reformats this page for A4, so the PDF always matches what is on the site.</span>
+    <span class="mono" style="display:block;margin-top:14px;font-size:12px;color:var(--ink-3)">Two-page A4 PDF of this page · updated October 2026</span>
   </p>
 
 </main>
@@ -215,11 +233,5 @@
 </footer>
 
 <script src="assets/app.js"></script>
-<script>
-['printcv','printcv2'].forEach(function(id){
-  var el = document.getElementById(id);
-  if (el) el.addEventListener('click', function(e){ e.preventDefault(); window.print(); });
-});
-</script>
 </body>
 </html>
